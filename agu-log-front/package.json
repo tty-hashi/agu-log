@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "pre-push": "run-s prettier lint build",
+    "pre-push": "run-s prettier build",
     "prettier": "prettier --check './**/*.{js,jsx,ts,tsx,json,css,scss}'",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,json,css,scss}'"
   },
