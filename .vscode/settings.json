@@ -1,0 +1,13 @@
+{
+  "eslint.workingDirectories": ["./agu-log-front"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit",
+  },
+  "eslint.validate": ["html", "javascriptreact", "typescriptreact"],
+  "css.validate": false,
+  "scss.validate": false,
+  "eslint.useFlatConfig": true,
+}
