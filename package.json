@@ -1,0 +1,17 @@
+{
+  "name": "agu-log",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky",
+    "pre-push": "run-s pre-push:*",
+    "pre-push:frontend": "npm run pre-push --prefix ./frontend"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}
