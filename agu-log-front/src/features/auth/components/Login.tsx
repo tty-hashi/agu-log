@@ -24,7 +24,7 @@ export default function LoginPage() {
         supabaseClient={supabase}
         appearance={appearance}
         providers={['google']} // 使用したいプロバイダーを指定
-        redirectTo={`${location.origin}/auth/callback`}
+        redirectTo={`/api/auth/callback`}
         theme='dark' // または "light"
         localization={{
           variables: {

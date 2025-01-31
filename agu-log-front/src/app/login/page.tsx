@@ -1,4 +1,4 @@
-import Login from '@/features/routes/auth/components/Login'
+import Login from '@/features/auth/components/Login'
 
 export default function LoginPage() {
   return <Login />
