@@ -23,6 +23,8 @@ const eslintConfig = [
         }
       ],
       "no-unused-expressions": ["error", { "allowTernary": true }],
+      "@typescript-eslint/switch-exhaustiveness-check": "error", // switch文のexhaustiveness check
+      // "react-hooks/rules-of-hooks": "error",
     },
   },
 ];

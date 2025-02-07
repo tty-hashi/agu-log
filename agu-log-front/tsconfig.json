@@ -15,7 +15,7 @@
     "incremental": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noUncheckedIndexedAccess": true,
+    "noUncheckedIndexedAccess": true, // index へのアクセスを厳密にチェック
     "plugins": [
       {
         "name": "next"
