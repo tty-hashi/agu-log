@@ -12,6 +12,7 @@ const supabase = createClient(
 )
 
 export const authOptions: NextAuthOptions = {
+  debug: true, // 開発時のみtrueに
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -48,6 +49,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/signin',
     verifyRequest: '/auth/verify-request',
+    error: 'error',
   },
   callbacks: {
     session: async ({ session, user }) => {
@@ -55,6 +57,15 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id
       }
       return session
+    },
+    async signIn({ user, account, profile }) {
+      console.log('SignIn callback:', { user, account, profile })
+      // ... 残りのコード
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      console.log('Redirect callback:', { url, baseUrl })
+      return url.startsWith(baseUrl) ? url : baseUrl
     },
   },
   events: {
