@@ -58,9 +58,17 @@ export const authOptions: NextAuthOptions = {
       }
       return session
     },
-    async signIn({ user, account, profile }) {
-      console.log('SignIn callback:', { user, account, profile })
-      // ... 残りのコード
+    signIn: async ({ user, account }) => {
+      if (account?.provider === 'google') {
+        // Googleからのプロフィール情報で更新するかどうかを判断
+        await prisma.profile.update({
+          where: { id: user.id },
+          data: {
+            avatarUrl: user.image || undefined,
+            // 他の更新したいフィールド
+          },
+        })
+      }
       return true
     },
     async redirect({ url, baseUrl }) {
