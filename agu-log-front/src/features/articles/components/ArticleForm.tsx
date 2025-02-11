@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import Editor from './Editor'
+import Editor from '../Editor'
 
 const ArticleForm = () => {
   const [title, setTitle] = useState('')
@@ -25,6 +25,7 @@ const ArticleForm = () => {
           onChange={(e) => setTitle(e.target.value)}
           placeholder='記事のタイトルを入力'
           required
+          className='h-auto py-4 md:text-2xl font-bold'
         />
       </div>
 
