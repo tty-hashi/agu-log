@@ -1,4 +1,4 @@
-import { AuthContainer } from '@/features/auth/components/AuthContainer'
+import { AuthContainer } from '@/features/auth/AuthContainer'
 
 export default function SignInPage() {
   return <AuthContainer />
