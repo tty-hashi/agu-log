@@ -1,9 +1,9 @@
 'use client'
 import Link from 'next/link'
 import React from 'react'
-import { Button } from '../ui/button'
+import { Button } from '../../ui/button'
 import { useSession } from 'next-auth/react'
-import UserIcon from '@/components/Header/components/UserIcon'
+import UserIcon from '@/components/Lv2/Header/components/UserIcon'
 
 const Header = () => {
   const { data: session } = useSession()

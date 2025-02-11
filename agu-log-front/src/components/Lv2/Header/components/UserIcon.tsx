@@ -1,9 +1,9 @@
 'use client'
 
 import React from 'react'
-import Avatar from '@/components/Avatar/Avatar'
+import Avatar from '@/components/Lv1/Avatar/Avatar'
 import { signOut, useSession } from 'next-auth/react'
-import DropDown from '@/components/Dropdonwn/Dropdown'
+import DropDown from '@/components/Lv1/Dropdonwn/Dropdown'
 import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu'
 
 const UserIcon = () => {
