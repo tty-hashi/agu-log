@@ -153,19 +153,33 @@ body {
     border-top: 1px solid var(--gray-2);
     margin: 2rem 0;
   }
-  table {
+}
+
+@layer components {
+  .prose table {
     @apply border-collapse table-auto w-full my-4;
   }
 
-  table th {
-    @apply border px-4 py-2 bg-gray-100 font-bold;
+  .prose table th {
+    @apply border px-4 py-2 bg-gray-100 font-bold text-left;
   }
 
-  table td {
+  .prose table td {
     @apply border px-4 py-2;
   }
 
-  table tr:nth-child(even) {
+  .prose table tr:nth-child(even) {
     @apply bg-gray-50;
+  }
+
+  /* テーブルセルの選択状態のスタイル */
+  .prose table td.selected,
+  .prose table th.selected {
+    @apply bg-blue-50;
+  }
+
+  /* テーブルのホバー状態 */
+  .prose table tr:hover td {
+    @apply bg-gray-100;
   }
 }

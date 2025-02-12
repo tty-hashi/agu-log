@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import ToolbarHeading from './ToolbarHeading'
 import ColorPicker from './ColorPicker'
+import TableMenu from './TableMenu'
 
 type Props = {
   editor: Editor
@@ -82,10 +83,14 @@ const EditorToolbar = ({ editor }: Props) => {
         }
       />
 
-      {/* テーブル */}
-      <Button variant='ghost' size='sm' onClick={addTable}>
-        <TableIcon className='h-4 w-4' />
-      </Button>
+      <div className='flex items-center gap-1'>
+        {!editor.isActive('table') && (
+          <Button variant='ghost' size='sm' onClick={addTable}>
+            <TableIcon className='h-4 w-4' />
+          </Button>
+        )}
+        <TableMenu editor={editor} />
+      </div>
 
       <Button
         variant='ghost'
