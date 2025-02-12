@@ -77,12 +77,12 @@ body {
   }
 
   /* List styles */
-  ul, 
+  ul,
   ol {
     list-style-type: disc;
     padding: 0 1rem;
     margin: 1.25rem 1rem 1.25rem 0.4rem;
-    
+
     li p {
       margin-top: 0.25em;
       margin-bottom: 0.25em;
@@ -90,33 +90,31 @@ body {
   }
 
   /* Heading styles */
-  h2, 
-  h3, 
-  h4
-  {
+  h2,
+  h3,
+  h4 {
     line-height: 1.1;
     margin-top: 2.5rem;
     text-wrap: pretty;
     font-weight: bold;
   }
 
-  h1, 
+  h1,
   h2 {
     margin-top: 3.5rem;
     margin-bottom: 1.5rem;
   }
 
-
-  h2 { 
-    font-size: 1.4rem; 
+  h2 {
+    font-size: 1.4rem;
   }
 
-  h3 { 
-    font-size: 1.2rem; 
+  h3 {
+    font-size: 1.2rem;
   }
 
-  h4 { 
-    font-size: 1rem; 
+  h4 {
+    font-size: 1rem;
   }
 
   /* Code and preformatted text styles */
@@ -145,7 +143,7 @@ body {
   }
 
   blockquote {
-    border-left: 3px solid var(--gray-3);
+    border-left: 3px solid gray;
     margin: 1.5rem 0;
     padding-left: 1rem;
   }
@@ -154,5 +152,20 @@ body {
     border: none;
     border-top: 1px solid var(--gray-2);
     margin: 2rem 0;
+  }
+  table {
+    @apply border-collapse table-auto w-full my-4;
+  }
+
+  table th {
+    @apply border px-4 py-2 bg-gray-100 font-bold;
+  }
+
+  table td {
+    @apply border px-4 py-2;
+  }
+
+  table tr:nth-child(even) {
+    @apply bg-gray-50;
   }
 }
