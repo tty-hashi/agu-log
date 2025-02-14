@@ -2,6 +2,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -111,13 +112,17 @@ model Tag {
 }
 
 // 投稿関連のモデル
+enum PostStatus {
+  draft
+  published
+}
 model Post {
   id          String    @id @default(uuid())
   postId      String?   @unique @map("post_id") @db.VarChar(16) // 追加：投稿ID
   authorId    String    @map("author_id")
   title       String
   content     String
-  status      String
+  status      PostStatus @default(draft)  // enum
   publishedAt DateTime? @map("published_at")
   metadata    Json?
   createdAt   DateTime  @default(now()) @map("created_at")
