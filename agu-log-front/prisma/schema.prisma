@@ -68,6 +68,7 @@ model VerificationToken {
 
 model Profile {
   id                String    @id
+  username          String?   @unique @db.VarChar(20) // 追加：ユーザー名
   displayName       String?   @map("display_name")
   bio              String?
   location         String?
@@ -80,6 +81,7 @@ model Profile {
 
   user             User      @relation(fields: [id], references: [id], onDelete: Cascade)
 
+  @@index([username])
   @@map("profiles")
 }
 
@@ -111,6 +113,7 @@ model Tag {
 // 投稿関連のモデル
 model Post {
   id          String    @id @default(uuid())
+  postId      String?   @unique @map("post_id") @db.VarChar(16) // 追加：投稿ID
   authorId    String    @map("author_id")
   title       String
   content     String
@@ -125,6 +128,8 @@ model Post {
   tags        PostTag[]
   likes       PostLike[]
 
+  @@unique([authorId, postId])
+  @@index([postId])
   @@map("posts")
 }
 
