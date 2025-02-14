@@ -24,7 +24,6 @@ export async function POST() {
         status: 'draft',
         postId,
         authorId: session.user.id,
-        slug: `draft-${postId}`, // postIdを使ってスラグを生成
       },
       include: {
         author: {
