@@ -4,6 +4,7 @@ import React from 'react'
 import { Button } from '../../ui/button'
 import { useSession } from 'next-auth/react'
 import UserIcon from '@/components/Lv2/Header/components/UserIcon'
+import { CreateArticleButton } from './components/CreateArticleButton'
 
 const Header = () => {
   const { data: session } = useSession()
@@ -20,9 +21,7 @@ const Header = () => {
             {session ? (
               <>
                 <UserIcon />
-                <Button asChild variant='ghost'>
-                  <Link href='/articles/new'>投稿する</Link>
-                </Button>
+                <CreateArticleButton />
               </>
             ) : (
               <Button asChild variant='ghost'>
