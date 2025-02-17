@@ -33,12 +33,13 @@ export async function POST() {
         },
       },
     })
+    const username = post.author.profile?.username || post.author.id
 
     // 編集ページのURLを返す
     return NextResponse.json(
       {
         post,
-        url: `/articles/${post.postId}/edit`,
+        url: `${username}/articles/${post.postId}/edit`,
       },
       { status: 201 },
     )

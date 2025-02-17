@@ -17,7 +17,7 @@ export default async function EditArticlePage({ params }: Props) {
     redirect('/signin')
   }
 
-  const postId = params.postId
+  const { postId } = await params
 
   // 記事データの取得
   const post = await prisma.post.findFirst({
