@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import Editor from './Editor'
 import { toast } from 'sonner'
 import { Post } from '@prisma/client'
+import { API_ROUTES } from '@/constants/endpoint'
 
 interface Props {
   post: Post
@@ -24,7 +25,7 @@ const ArticleForm = ({ post }: Props) => {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch('/api/posts', {
+      const response = await fetch(`${API_ROUTES.POSTS}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { API_ROUTES } from '@/constants/endpoint'
 
 export function CreateArticleButton() {
   const router = useRouter()
@@ -14,7 +15,7 @@ export function CreateArticleButton() {
     setIsCreating(true)
 
     try {
-      const response = await fetch('/api/posts/draft', {
+      const response = await fetch(`${API_ROUTES.POSTS_DRAFT}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

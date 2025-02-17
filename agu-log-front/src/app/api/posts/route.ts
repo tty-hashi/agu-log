@@ -1,4 +1,3 @@
-// src/app/api/posts/route.ts
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
@@ -44,17 +43,6 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: '権限がありません' }, { status: 403 })
     }
 
-    // スラグの更新（公開時のみ）
-    const slug =
-      validatedData.status === 'published'
-        ? `${existingPost.postId}-${validatedData.title
-            .toLowerCase()
-            .replace(/[^a-z0-9ぁ-んァ-ン一-龯]/g, '-')
-            .replace(/-+/g, '-')
-            .replace(/^-|-$/g, '')
-            .slice(0, 50)}`
-        : existingPost.slug
-
     // 記事を更新
     const post = await prisma.post.update({
       where: { postId: validatedData.postId },
@@ -62,7 +50,6 @@ export async function PUT(request: Request) {
         title: validatedData.title,
         content: validatedData.content,
         status: validatedData.status,
-        slug,
         publishedAt:
           validatedData.status === 'published' && !existingPost.publishedAt
             ? new Date()
