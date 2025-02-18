@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation'
+import { getServerSession } from 'next-auth'
 import prisma from '@/lib/prisma'
 import { BaseLayout } from '@/components/layout/BaseLayout'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import ArticleView from '@/features/articles/ArticleView'
 
 interface Props {
   params: {
@@ -11,6 +14,7 @@ interface Props {
 
 export default async function ArticlePage({ params }: Props) {
   const { username, postId } = params
+  const session = await getServerSession(authOptions)
 
   // 記事データの取得
   const post = await prisma.post.findFirst({
@@ -21,16 +25,19 @@ export default async function ArticlePage({ params }: Props) {
           username,
         },
       },
+      // 非公開記事は著者本人のみ閲覧可能
+      OR: [
+        { status: 'published' },
+        {
+          status: 'draft',
+          authorId: session?.user?.id,
+        },
+      ],
     },
     include: {
       author: {
         include: {
           profile: true,
-        },
-      },
-      tags: {
-        include: {
-          tag: true,
         },
       },
     },
@@ -42,16 +49,7 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <BaseLayout>
-      <article className='max-w-4xl mx-auto'>
-        <h1 className='text-3xl font-bold mb-4'>{post.title}</h1>
-        <div className='mb-4 text-gray-600'>
-          <span>{post.author.profile?.displayName || username}</span>
-          <time className='ml-4'>
-            {new Date(post.publishedAt || post.createdAt).toLocaleDateString()}
-          </time>
-        </div>
-        <div className='prose max-w-none' dangerouslySetInnerHTML={{ __html: post.content }} />
-      </article>
+      <ArticleView post={post} />
     </BaseLayout>
   )
 }
