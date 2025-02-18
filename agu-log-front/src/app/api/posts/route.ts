@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from '@/lib/prisma'
 import { z } from 'zod'
-import { updatePostSchema } from '@/features/articles/ArticleForm'
+import { updatePostSchema } from '@/validations/schemas/post'
 
 export async function PUT(request: Request) {
   try {

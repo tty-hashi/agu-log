@@ -10,18 +10,11 @@ import { toast } from 'sonner'
 import { Post } from '@prisma/client'
 import { API_ROUTES } from '@/constants/endpoint'
 import { z } from 'zod'
+import { updatePostSchema } from '@/validations/schemas/post'
 
 interface Props {
   post: Post
 }
-
-export const updatePostSchema = z.object({
-  title: z.string().min(1, '記事タイトルは必須です'),
-  content: z.string().min(1, '記事内容は必須です'),
-  status: z.enum(['draft', 'published']),
-  postId: z.string(),
-  tagIds: z.array(z.string()).optional(),
-})
 
 const ArticleForm = ({ post }: Props) => {
   const router = useRouter()
@@ -31,7 +24,7 @@ const ArticleForm = ({ post }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent, status: 'draft' | 'published') => {
     e.preventDefault()
-    updatePostSchema.parse({ title, content })
+    updatePostSchema.parse({ title, content, status, postId: post.postId })
     setIsSubmitting(true)
 
     try {
@@ -63,7 +56,7 @@ const ArticleForm = ({ post }: Props) => {
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
-        toast.error(error.message)
+        toast.error('入力内容に誤りがあります')
       }
       toast.error(error instanceof Error ? error.message : '記事の保存に失敗しました')
     } finally {
