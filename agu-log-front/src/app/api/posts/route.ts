@@ -3,15 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from '@/lib/prisma'
 import { z } from 'zod'
-
-// バリデーションスキーマ
-const updatePostSchema = z.object({
-  title: z.string().min(1, '記事タイトルは必須です'),
-  content: z.string().min(1, '記事内容は必須です'),
-  status: z.enum(['draft', 'published']),
-  postId: z.string(),
-  tagIds: z.array(z.string()).optional(),
-})
+import { updatePostSchema } from '@/features/articles/ArticleForm'
 
 export async function PUT(request: Request) {
   try {
