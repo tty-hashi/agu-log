@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default async function ArticlePage({ params }: Props) {
-  const { username, postId } = params
+  const { username, postId } = await params
   const session = await getServerSession(authOptions)
 
   // 記事データの取得
