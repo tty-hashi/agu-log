@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { BaseLayout } from '@/components/layout/BaseLayout'
+import ArticleListWrapper from '@/features/articles/components/ArticleListWrapper'
 
 interface Props {
   params: {
@@ -8,9 +9,7 @@ interface Props {
   }
 }
 
-export default async function UserPage({ params }: Props) {
-  const username = params.username
-
+export default async function UserPage({ params: { username } }: Props) {
   const profile = await prisma.profile.findFirst({
     where: { username },
     include: {
@@ -26,7 +25,7 @@ export default async function UserPage({ params }: Props) {
     <BaseLayout>
       <div className='max-w-4xl mx-auto'>
         <h1 className='text-2xl font-bold mb-6'>{profile.displayName || username}の記事一覧</h1>
-        {/* 記事一覧コンポーネント */}
+        <ArticleListWrapper username={username} />
       </div>
     </BaseLayout>
   )
