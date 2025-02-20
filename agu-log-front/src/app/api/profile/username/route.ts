@@ -17,19 +17,29 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: '認証が必要です' }, { status: 401 })
     }
 
+    // 既存のプロフィールを取得
+    const existingProfile = await prisma.profile.findUnique({
+      where: { id: session.user.id },
+    })
+
+    // 既にユーザー名が設定されている場合はエラー
+    if (existingProfile?.username) {
+      return NextResponse.json({ error: 'ユーザー名は変更できません' }, { status: 400 })
+    }
+
     const body = await request.json()
     const { username } = usernameObjectSchema.parse(body)
 
     // ユーザー名の重複チェック
-    const existingProfile = await prisma.profile.findFirst({
+    const duplicateCheck = await prisma.profile.findFirst({
       where: { username },
     })
 
-    if (existingProfile) {
+    if (duplicateCheck) {
       return NextResponse.json({ error: 'このユーザー名は既に使用されています' }, { status: 400 })
     }
 
-    // プロフィールの更新
+    // プロフィールの更新（初回のみ）
     await prisma.profile.update({
       where: { id: session.user.id },
       data: { username },
@@ -43,4 +53,13 @@ export async function POST(request: Request) {
     }
     return NextResponse.json({ error: 'ユーザー名の設定に失敗しました' }, { status: 500 })
   }
+}
+
+// PUT や PATCH メソッドも明示的にブロック
+export async function PUT() {
+  return NextResponse.json({ error: 'ユーザー名は変更できません' }, { status: 405 })
+}
+
+export async function PATCH() {
+  return NextResponse.json({ error: 'ユーザー名は変更できません' }, { status: 405 })
 }
