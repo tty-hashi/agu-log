@@ -28,13 +28,20 @@ export async function POST() {
       include: {
         author: {
           include: {
-            profile: true,
+            profile: {
+              select: {
+                username: true,
+              },
+            },
           },
         },
       },
     })
-    const username = post.author.profile?.username || post.author.id
+    const username = post.author.profile?.username
 
+    if (!username) {
+      return NextResponse.json({ error: 'ユーザー名が設定されていません' }, { status: 400 })
+    }
     // 編集ページのURLを返す
     return NextResponse.json(
       {

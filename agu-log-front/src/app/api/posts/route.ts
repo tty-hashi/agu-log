@@ -67,11 +67,16 @@ export async function PUT(request: Request) {
     })
 
     // 記事URLの生成
-    const username = post.author.profile?.username || post.author.id
+    const username = post.author.profile?.username
+
+    if (!username) {
+      return NextResponse.json({ error: 'ユーザー名が設定されていません' }, { status: 400 })
+    }
+
     const url =
       validatedData.status === 'published'
         ? `/${username}/articles/${post.postId}`
-        : `/articles/${post.postId}/edit`
+        : `/${username}/articles/${post.postId}/edit`
 
     return NextResponse.json({ post, url })
   } catch (error) {
