@@ -2,7 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -18,25 +17,25 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts      Account[]
-  sessions      Session[]
-  profile       Profile?
-  posts         Post[]
+  accounts       Account[]
+  sessions       Session[]
+  profile        Profile?
+  posts          Post[]
   uploadedImages Image[]
-  likedPosts    PostLike[]
+  likedPosts     PostLike[]
 
   @@map("users")
 }
 
 model Account {
-  id                 String  @id @default(uuid())
-  userId             String  @map("user_id")
-  type               String
-  provider           String
-  providerAccountId  String  @map("provider_account_id")
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
+  id                String  @id @default(uuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
   token_type        String?
   scope             String?
   id_token          String?
@@ -68,19 +67,19 @@ model VerificationToken {
 }
 
 model Profile {
-  id                String    @id
-  username          String?   @unique @db.VarChar(20) // 追加：ユーザー名
-  displayName       String?   @map("display_name")
-  bio              String?
-  location         String?
-  avatarUrl        String?   @map("avatar_url")
-  farmingExperience String?   @map("farming_experience")
-  websiteUrl       String?   @map("website_url")
-  metadata         Json?
-  createdAt        DateTime  @default(now()) @map("created_at")
-  updatedAt        DateTime  @updatedAt @map("updated_at")
+  id                String   @id
+  username          String?  @unique @db.VarChar(20)
+  displayName       String?  @map("display_name")
+  bio               String?
+  location          String?
+  avatarUrl         String?  @map("avatar_url")
+  farmingExperience String?  @map("farming_experience")
+  websiteUrl        String?  @map("website_url")
+  metadata          Json?
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
-  user             User      @relation(fields: [id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
 
   @@index([username])
   @@map("profiles")
@@ -98,15 +97,15 @@ model TagCategory {
 }
 
 model Tag {
-  id          String      @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
-  slug        String      @unique
-  categoryId  String      @map("category_id")
+  slug        String   @unique
+  categoryId  String   @map("category_id")
   description String?
-  createdAt   DateTime    @default(now()) @map("created_at")
+  createdAt   DateTime @default(now()) @map("created_at")
 
-  category    TagCategory @relation(fields: [categoryId], references: [id])
-  postTags    PostTag[]
+  category TagCategory @relation(fields: [categoryId], references: [id])
+  postTags PostTag[]
 
   @@map("tags")
 }
@@ -116,21 +115,22 @@ enum PostStatus {
   draft
   published
 }
+
 model Post {
-  id          String    @id @default(uuid())
-  postId      String?   @unique @map("post_id") @db.VarChar(16) // 追加：投稿ID
-  authorId    String    @map("author_id")
+  id          String     @id @default(uuid())
+  postId      String?    @unique @map("post_id") @db.VarChar(16) // 追加：投稿ID
+  authorId    String     @map("author_id")
   title       String
   content     String
-  status      PostStatus @default(draft)  // enum
-  publishedAt DateTime? @map("published_at")
+  status      PostStatus @default(draft) // enum
+  publishedAt DateTime?  @map("published_at")
   metadata    Json?
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
 
-  author      User       @relation(fields: [authorId], references: [id])
-  tags        PostTag[]
-  likes       PostLike[]
+  author User       @relation(fields: [authorId], references: [id])
+  tags   PostTag[]
+  likes  PostLike[]
 
   @@unique([authorId, postId])
   @@index([postId])
@@ -142,8 +142,8 @@ model PostTag {
   tagId     String   @map("tag_id")
   createdAt DateTime @default(now()) @map("created_at")
 
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([postId, tagId])
   @@map("post_tags")
@@ -155,8 +155,8 @@ model PostLike {
   userId    String   @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
 
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([postId, userId])
   @@map("post_likes")
@@ -164,18 +164,18 @@ model PostLike {
 
 // 画像関連のモデル
 model Image {
-  id              String   @id @default(uuid())
-  userId          String   @map("user_id")
-  storageKey      String   @map("storage_key")
-  originalFilename String  @map("original_filename")
-  mimeType        String   @map("mime_type")
-  sizeBytes       Int      @map("size_bytes")
-  width           Int
-  height          Int
-  metadata        Json?
-  createdAt       DateTime @default(now()) @map("created_at")
+  id               String   @id @default(uuid())
+  userId           String   @map("user_id")
+  storageKey       String   @map("storage_key")
+  originalFilename String   @map("original_filename")
+  mimeType         String   @map("mime_type")
+  sizeBytes        Int      @map("size_bytes")
+  width            Int
+  height           Int
+  metadata         Json?
+  createdAt        DateTime @default(now()) @map("created_at")
 
-  user            User     @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@map("images")
 }
