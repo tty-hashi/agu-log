@@ -9,7 +9,8 @@ interface Props {
   }
 }
 
-export default async function UserPage({ params: { username } }: Props) {
+export default async function UserPage({ params }: Props) {
+  const { username } = await params
   const profile = await prisma.profile.findFirst({
     where: { username },
     include: {
