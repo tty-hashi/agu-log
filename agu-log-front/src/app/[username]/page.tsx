@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation'
 import prisma from '@/lib/prisma'
 import { BaseLayout } from '@/components/layout/BaseLayout'
-import ArticleListWrapper from '@/features/articles/components/ArticleListWrapper'
+import ArticleListWrapper from '@/features/posts/Editor/components/ArticleListWrapper'
 
 interface Props {
-  params: {
+  params: Promise<{
     username: string
-  }
+  }>
 }
 
 export default async function UserPage({ params }: Props) {

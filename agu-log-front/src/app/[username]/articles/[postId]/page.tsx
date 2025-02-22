@@ -3,13 +3,13 @@ import { getServerSession } from 'next-auth'
 import prisma from '@/lib/prisma'
 import { BaseLayout } from '@/components/layout/BaseLayout'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import ArticleView from '@/features/articles/ArticleView'
+import PostView from '@/features/posts/post/PostView'
 
 interface Props {
-  params: {
+  params: Promise<{
     username: string
     postId: string
-  }
+  }>
 }
 
 export default async function ArticlePage({ params }: Props) {
@@ -49,7 +49,7 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <BaseLayout>
-      <ArticleView post={post} />
+      <PostView post={post} />
     </BaseLayout>
   )
 }

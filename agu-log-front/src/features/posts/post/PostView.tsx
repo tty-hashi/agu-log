@@ -12,7 +12,7 @@ type ArticleViewProps = {
   }
 }
 
-export default function ArticleView({ post }: ArticleViewProps) {
+export default function PostView({ post }: ArticleViewProps) {
   const publishedAt = post.publishedAt || post.createdAt
   const timeAgo = formatDistanceToNow(new Date(publishedAt), {
     addSuffix: true,

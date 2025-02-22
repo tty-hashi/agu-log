@@ -1,4 +1,4 @@
-import Header from '../Lv2/Header/Header'
+import Header from '../../features/Header/Header'
 
 interface BaseLayoutProps {
   children: React.ReactNode

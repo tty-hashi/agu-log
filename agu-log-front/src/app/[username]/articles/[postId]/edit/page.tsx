@@ -3,12 +3,12 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from '@/lib/prisma'
 import { BaseLayout } from '@/components/layout/BaseLayout'
-import ArticleForm from '@/features/articles/ArticleForm'
+import ArticleForm from '@/features/posts/Editor/ArticleForm'
 
 interface Props {
-  params: {
+  params: Promise<{
     postId: string
-  }
+  }>
 }
 
 export default async function EditArticlePage({ params }: Props) {
