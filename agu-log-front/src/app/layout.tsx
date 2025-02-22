@@ -4,9 +4,9 @@ import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'sonner'
 import { getServerSession } from 'next-auth'
-import { authOptions } from './api/auth/[...nextauth]/route'
 import { isFirstLogin } from '@/lib/auth'
 import { UsernameSetupModal } from '@/features/auth/components/UserNameSetupModal'
+import { authOptions } from '@/lib/auth/config'
 
 const geist = Geist({
   subsets: ['latin'],

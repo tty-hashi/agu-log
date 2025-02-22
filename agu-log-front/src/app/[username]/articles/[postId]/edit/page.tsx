@@ -1,9 +1,9 @@
 import { notFound, redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from '@/lib/prisma'
 import { BaseLayout } from '@/components/layout/BaseLayout'
 import ArticleForm from '@/features/posts/Editor/ArticleForm'
+import { authOptions } from '@/lib/auth/config'
 
 interface Props {
   params: Promise<{

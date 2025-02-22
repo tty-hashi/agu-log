@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from '@/lib/prisma'
 import { z } from 'zod'
 import { updatePostSchema } from '@/validations/schemas/post'
+import { authOptions } from '@/lib/auth/config'
 
 export async function PUT(request: Request) {
   try {

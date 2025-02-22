@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import prisma from '@/lib/prisma'
 import { customAlphabet } from 'nanoid'
+import { authOptions } from '@/lib/auth/config'
 
 // post-id生成用の文字セット（似た文字を除外）
 const postIdAlphabet = '23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
