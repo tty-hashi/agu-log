@@ -1,23 +1,23 @@
 import { formatDistanceToNow } from 'date-fns'
 import { ja } from 'date-fns/locale'
-import { Post, Profile, User } from '@prisma/client'
 import { Card } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { LikeButton } from './components/LikeButton/LikeButton'
+import { PostWithRelations } from '@/app/[username]/articles/[postId]/page'
 
 type ArticleViewProps = {
-  post: Post & {
-    author: User & {
-      profile: Profile | null
-    }
-  }
+  post: PostWithRelations
+  currentUserId?: string
 }
 
-export default function PostView({ post }: ArticleViewProps) {
+export default function PostView({ post, currentUserId }: ArticleViewProps) {
   const publishedAt = post.publishedAt || post.createdAt
   const timeAgo = formatDistanceToNow(new Date(publishedAt), {
     addSuffix: true,
     locale: ja,
   })
+
+  const isLike = post.likes.some((like) => like.userId === currentUserId)
 
   return (
     <Card className='max-w-4xl mx-auto p-6'>
@@ -50,6 +50,11 @@ export default function PostView({ post }: ArticleViewProps) {
           <div className='text-sm text-muted-foreground'>
             公開日: {new Date(publishedAt).toLocaleDateString('ja-JP')}
           </div>
+          <LikeButton
+            postId={post.id}
+            initialIsLiked={isLike}
+            initialLikeCount={post._count.likes}
+          />
         </div>
       </footer>
     </Card>
