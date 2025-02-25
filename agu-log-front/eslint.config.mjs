@@ -12,19 +12,10 @@ export default [
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   {
-    settings: {
-      react: {
-        version: "detect" // 自動的に React のバージョンを検出
-      },
-    },
     rules: {
-      "react/react-in-jsx-scope": "off", // JSX に React の import を強制しない
-      // "react/jsx-runtime": "error" // `react/jsx-runtime` を使う
-    },
-  },
-  {
-    rules: {
-      "no-console": ["error", { allow: ["warn", "error"] }],
+      "react/react-in-jsx-scope": "off", // Reactをimportしなくても使えるようにする
+      "no-console": "error", // コンソールの使用を禁止
+      // "@typescript-eslint/switch-exhaustiveness-check": "error", // switch文のexhaustiveness check
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
@@ -33,7 +24,6 @@ export default [
           "caughtErrors": "none"
         }
       ],
-      "@typescript-eslint/switch-exhaustiveness-check": "error", // switch文のexhaustiveness check
-    }
-  }
+    },
+  },
 ];
