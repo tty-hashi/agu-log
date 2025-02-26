@@ -80,7 +80,6 @@ export async function PUT(request: Request) {
 
     return NextResponse.json({ post, url })
   } catch (error) {
-    console.error('記事更新エラー:', error)
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'バリデーションエラー', details: error.errors },

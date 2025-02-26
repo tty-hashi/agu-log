@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 const EmailSignIn = () => {
   const [email, setEmail] = useState('')
@@ -16,7 +17,7 @@ const EmailSignIn = () => {
     try {
       await signIn('email', { email, callbackUrl: '/' })
     } catch (error) {
-      console.error('Error during sign in:', error)
+      toast.error('サインインに失敗しました')
     } finally {
       setIsLoading(false)
     }

@@ -51,7 +51,6 @@ export async function POST() {
       { status: 201 },
     )
   } catch (error) {
-    console.error('空の記事作成エラー:', error)
     return NextResponse.json({ error: '記事の作成に失敗しました' }, { status: 500 })
   }
 }

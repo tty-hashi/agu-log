@@ -44,6 +44,13 @@ export async function toggleLike(postId: string) {
       })
     }
 
+    // await new Promise(() => {
+    //   setTimeout(() => {
+    //     // いいねの更新
+    //     revalidatePath(`/posts/${postId}`)
+    //   }, 3000)
+    // })
+
     // キャッシュの更新
     revalidatePath('/[username]/articles/[postId]')
 
