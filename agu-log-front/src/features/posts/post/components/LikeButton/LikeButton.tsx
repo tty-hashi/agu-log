@@ -1,8 +1,6 @@
 'use client'
 
-import { startTransition, useOptimistic } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useOptimistic } from 'react'
 import { toast } from 'sonner'
 import { HeartButton } from '@/components/Lv2/HeartButton/HeartButton'
 import { toggleLike } from './action'
@@ -14,9 +12,6 @@ interface PostLikeButtonProps {
 }
 
 export function LikeButton({ postId, initialLikeCount, initialIsLiked }: PostLikeButtonProps) {
-  const { data: session } = useSession()
-  const router = useRouter()
-
   const [optimisticLike, updateOptimisticLike] = useOptimistic(
     { count: initialLikeCount, isLiked: initialIsLiked },
     ({ isLiked, count }, optimisticValue: number) => {
@@ -28,16 +23,9 @@ export function LikeButton({ postId, initialLikeCount, initialIsLiked }: PostLik
   )
 
   const handleLikeClick = async () => {
-    if (!session) {
-      router.push('/signin')
-      return
-    }
-
     try {
       // 楽観的更新を実行
-      startTransition(() => {
-        updateOptimisticLike(1)
-      })
+      updateOptimisticLike(1)
       await toggleLike(postId)
     } catch (error) {
       toast.error('いいねの処理に失敗しました')
@@ -45,10 +33,8 @@ export function LikeButton({ postId, initialLikeCount, initialIsLiked }: PostLik
   }
 
   return (
-    <HeartButton
-      isLiked={optimisticLike.isLiked}
-      likeCount={optimisticLike.count}
-      onClick={handleLikeClick}
-    />
+    <form action={handleLikeClick}>
+      <HeartButton isLiked={optimisticLike.isLiked} likeCount={optimisticLike.count} />
+    </form>
   )
 }
