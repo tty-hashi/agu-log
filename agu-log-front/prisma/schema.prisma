@@ -23,6 +23,7 @@ model User {
   posts          Post[]
   uploadedImages Image[]
   likedPosts     PostLike[]
+  Comment        Comment[]
 
   @@map("users")
 }
@@ -128,9 +129,10 @@ model Post {
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime   @updatedAt @map("updated_at")
 
-  author User       @relation(fields: [authorId], references: [id])
-  tags   PostTag[]
-  likes  PostLike[]
+  author  User       @relation(fields: [authorId], references: [id])
+  tags    PostTag[]
+  likes   PostLike[]
+  Comment Comment[]
 
   @@unique([authorId, postId])
   @@index([postId])
@@ -178,4 +180,18 @@ model Image {
   user User @relation(fields: [userId], references: [id])
 
   @@map("images")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  postId    String   @map("post_id")
+  authorId  String   @map("author_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
 }
