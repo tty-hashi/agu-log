@@ -7,4 +7,191 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// TODO: モデル設計から
+// 基本的なユーザー関連のモデル
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts       Account[]
+  sessions       Session[]
+  profile        Profile?
+  posts          Post[]
+  uploadedImages Image[]
+  likedPosts     PostLike[]
+  Comment        Comment[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Profile {
+  id                String   @id
+  username          String?  @unique @db.VarChar(20)
+  displayName       String?  @map("display_name")
+  bio               String?
+  location          String?
+  avatarUrl         String?  @map("avatar_url")
+  farmingExperience String?  @map("farming_experience")
+  websiteUrl        String?  @map("website_url")
+  metadata          Json?
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  @@index([username])
+  @@map("profiles")
+}
+
+// タグ関連のモデル
+model TagCategory {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  tags        Tag[]
+
+  @@map("tag_categories")
+}
+
+model Tag {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  categoryId  String   @map("category_id")
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  category TagCategory @relation(fields: [categoryId], references: [id])
+  postTags PostTag[]
+
+  @@map("tags")
+}
+
+// 投稿関連のモデル
+enum PostStatus {
+  draft
+  published
+}
+
+model Post {
+  id          String     @id @default(uuid())
+  postId      String?    @unique @map("post_id") @db.VarChar(16) // 追加：投稿ID
+  authorId    String     @map("author_id")
+  title       String
+  content     String
+  status      PostStatus @default(draft) // enum
+  publishedAt DateTime?  @map("published_at")
+  metadata    Json?
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  author  User       @relation(fields: [authorId], references: [id])
+  tags    PostTag[]
+  likes   PostLike[]
+  Comment Comment[]
+
+  @@unique([authorId, postId])
+  @@index([postId])
+  @@map("posts")
+}
+
+model PostTag {
+  postId    String   @map("post_id")
+  tagId     String   @map("tag_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@map("post_tags")
+}
+
+// いいね機能のモデル
+model PostLike {
+  postId    String   @map("post_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([postId, userId])
+  @@map("post_likes")
+}
+
+// 画像関連のモデル
+model Image {
+  id               String   @id @default(uuid())
+  userId           String   @map("user_id")
+  storageKey       String   @map("storage_key")
+  originalFilename String   @map("original_filename")
+  mimeType         String   @map("mime_type")
+  sizeBytes        Int      @map("size_bytes")
+  width            Int
+  height           Int
+  metadata         Json?
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("images")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  postId    String   @map("post_id")
+  authorId  String   @map("author_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}

@@ -1,0 +1,4 @@
+# shadcn コンポーネントは Prettier から除外
+src/components/ui/**
+
+components.json
