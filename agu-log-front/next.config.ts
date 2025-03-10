@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['lh3.googleusercontent.com'], // Google の画像ドメインを許可
   },
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config) => {
     config.plugins.push(codeInspectorPlugin({ bundler: 'webpack' }))
     return config
   },
