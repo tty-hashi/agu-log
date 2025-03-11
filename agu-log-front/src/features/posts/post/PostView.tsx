@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { LikeButton } from './components/LikeButton/LikeButton'
 import { PostWithRelations } from '@/app/[username]/articles/[postId]/page'
+import CommentSection from './components/Comments/CommentSection'
 
 type ArticleViewProps = {
   post: PostWithRelations
@@ -57,6 +58,9 @@ export default function PostView({ post, currentUserId }: ArticleViewProps) {
           />
         </div>
       </footer>
+
+      {/* コメントセクション */}
+      <CommentSection postId={post.id} />
     </Card>
   )
 }
