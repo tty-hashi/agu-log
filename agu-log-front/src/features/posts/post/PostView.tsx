@@ -1,3 +1,4 @@
+// src/features/posts/post/PostView.tsx
 import { formatDistanceToNow } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { Card } from '@/components/ui/card'
@@ -5,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { LikeButton } from './components/LikeButton/LikeButton'
 import { PostWithRelations } from '@/app/[username]/articles/[postId]/page'
 import CommentSection from './components/Comments/CommentSection'
+import { EditButton } from './components/EditButton/EditButton'
 
 type ArticleViewProps = {
   post: PostWithRelations
@@ -20,11 +22,20 @@ export default function PostView({ post, currentUserId }: ArticleViewProps) {
 
   const isLike = post.likes.some((like) => like.userId === currentUserId)
 
+  // 記事の所有者かどうかをチェック
+  const isOwner = currentUserId === post.authorId
+
+  // ユーザー名を取得
+  const username = post.author.profile?.username || ''
+
   return (
     <Card className='max-w-4xl mx-auto p-6'>
       {/* 記事ヘッダー */}
       <header className='mb-8'>
-        <h1 className='text-3xl font-bold mb-4'>{post.title}</h1>
+        <div className='flex justify-between items-start mb-4'>
+          <h1 className='text-3xl font-bold'>{post.title}</h1>
+          {isOwner && <EditButton username={username} postId={post.postId || ''} />}
+        </div>
         <div className='flex items-center gap-4'>
           <div className='flex items-center gap-2'>
             <Avatar>
