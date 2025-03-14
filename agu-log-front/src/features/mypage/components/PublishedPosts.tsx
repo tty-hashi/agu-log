@@ -2,7 +2,7 @@
 import { Suspense } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import prisma from '@/lib/prisma'
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 import { ja } from 'date-fns/locale'
 import Link from 'next/link'
 import { PostStatus } from '@prisma/client'

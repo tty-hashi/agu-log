@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 import { ja } from 'date-fns/locale'
 import prisma from '@/lib/prisma'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
