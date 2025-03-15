@@ -124,6 +124,7 @@ model Post {
   title       String
   content     String
   status      PostStatus @default(draft) // enum
+  viewCount   Int        @default(0) @map("view_count") // ビュー数を追加
   publishedAt DateTime?  @map("published_at")
   metadata    Json?
   createdAt   DateTime   @default(now()) @map("created_at")
