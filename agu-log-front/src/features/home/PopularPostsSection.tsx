@@ -1,11 +1,8 @@
-// src/features/home/PopularPostsSection.tsx
 import Link from 'next/link'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import prisma from '@/lib/prisma'
-
-// ISRで一日1回再検証するための設定
-export const revalidate = 86400 // 24時間（秒単位）
+import { HeartButton } from '@/components/Lv2/HeartButton/HeartButton'
 
 export default async function PopularPostsSection() {
   // 現在の日付を取得
@@ -13,7 +10,7 @@ export default async function PopularPostsSection() {
 
   // 24時間前の日時を計算
   const oneDayBefore = new Date(now)
-  oneDayBefore.setHours(oneDayBefore.getHours() - 24)
+  oneDayBefore.setHours(oneDayBefore.getHours() - 72)
 
   // 24時間以内に作成されたいいねの多い投稿を取得
   const popularPosts = await prisma.post.findMany({
@@ -45,7 +42,7 @@ export default async function PopularPostsSection() {
         _count: 'desc',
       },
     },
-    take: 4, // 上位4件を表示
+    take: 3, // 上位4件を表示
   })
 
   if (popularPosts.length === 0) {
@@ -84,7 +81,7 @@ export default async function PopularPostsSection() {
             </Link>
 
             <div className='flex items-center gap-1 text-xs'>
-              <span className='text-red-500'>♥</span> {post._count.likes}
+              <HeartButton isLiked={false} likeCount={post._count.likes} />
             </div>
           </CardFooter>
         </Card>

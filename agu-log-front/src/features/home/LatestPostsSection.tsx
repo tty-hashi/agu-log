@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import prisma from '@/lib/prisma'
 import { ja } from 'date-fns/locale'
 import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
+import { HeartButton } from '@/components/Lv2/HeartButton/HeartButton'
 
 export default async function LatestPostsSection() {
   // 最新の公開記事を10件取得
@@ -61,6 +62,9 @@ export default async function LatestPostsSection() {
                 addSuffix: true,
                 locale: ja,
               })}
+            </div>
+            <div className='text-xs text-muted-foreground'>
+              <HeartButton isLiked={false} likeCount={post._count.likes} />
             </div>
           </CardFooter>
         </Card>
