@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import prisma from '@/lib/prisma'
-import { HeartButton } from '@/components/Lv2/HeartButton/HeartButton'
+import { HeartComponent } from '@/components/Lv2/HeartButton/HeartComponent'
 
 export default async function PopularPostsSection() {
   // 現在の日付を取得
@@ -57,7 +57,7 @@ export default async function PopularPostsSection() {
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
       {popularPosts.map((post) => (
         <Card key={post.id} className='hover:shadow-md transition-shadow'>
-          <CardHeader className='pb-2'>
+          <CardHeader className='pb-6  h-32'>
             <Link
               href={`/${post.author.profile?.username}/articles/${post.postId}`}
               className='text-lg font-bold hover:text-blue-600 transition-colors line-clamp-2'>
@@ -81,7 +81,7 @@ export default async function PopularPostsSection() {
             </Link>
 
             <div className='flex items-center gap-1 text-xs'>
-              <HeartButton isLiked={false} likeCount={post._count.likes} />
+              <HeartComponent likeCount={post._count.likes} />
             </div>
           </CardFooter>
         </Card>
