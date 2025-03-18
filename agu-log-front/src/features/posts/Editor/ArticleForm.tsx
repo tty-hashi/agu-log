@@ -7,10 +7,11 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import Editor from './Editor'
 import { toast } from 'sonner'
-import { Post } from '@prisma/client'
+import { Post, PostType } from '@prisma/client'
 import { API_ROUTES } from '@/constants/endpoint'
 import { z } from 'zod'
 import { updatePostSchema } from '@/validations/schemas/post'
+import { PostTypeSelector } from './components/PostTypeSelector'
 
 interface Props {
   post: Post
@@ -20,11 +21,12 @@ const ArticleForm = ({ post }: Props) => {
   const router = useRouter()
   const [title, setTitle] = useState(post.title)
   const [content, setContent] = useState(post.content)
+  const [type, setType] = useState<PostType>(post.type || 'diary') // 記事タイプの状態追加
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent, status: 'draft' | 'published') => {
     e.preventDefault()
-    updatePostSchema.parse({ title, content, status, postId: post.postId })
+    updatePostSchema.parse({ title, content, status, type, postId: post.postId })
     setIsSubmitting(true)
 
     try {
@@ -37,6 +39,7 @@ const ArticleForm = ({ post }: Props) => {
           title,
           content,
           status,
+          type, // 記事タイプを追加
           postId: post.postId,
         }),
       })
@@ -77,6 +80,8 @@ const ArticleForm = ({ post }: Props) => {
           className='h-auto py-4 md:text-2xl font-bold'
         />
       </div>
+
+      <PostTypeSelector value={type} onChange={setType} />
 
       <div className='space-y-2'>
         <Label>本文</Label>

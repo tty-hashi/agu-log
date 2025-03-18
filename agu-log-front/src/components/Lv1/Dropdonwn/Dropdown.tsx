@@ -20,7 +20,7 @@ const DropDown: React.FC<Props> = ({ children, label, trigger }) => {
       <DropdownMenuContent>
         <DropdownMenuLabel>{label}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {children}
+        <div className='flex flex-col gap-4 p-2'>{children}</div>
         <DropdownMenuSeparator />
       </DropdownMenuContent>
     </DropdownMenu>

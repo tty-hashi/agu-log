@@ -42,6 +42,7 @@ export async function PUT(request: Request) {
         title: validatedData.title,
         content: validatedData.content,
         status: validatedData.status,
+        type: validatedData.type, // 記事タイプを追加
         publishedAt:
           validatedData.status === 'published' && !existingPost.publishedAt
             ? new Date()

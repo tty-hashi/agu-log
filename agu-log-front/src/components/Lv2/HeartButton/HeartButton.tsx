@@ -6,6 +6,7 @@ interface HeartButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
   isLiked: boolean
   likeCount: number
   size?: 'sm' | 'md' | 'lg'
+  hover?: boolean
 }
 
 const sizeClasses = {
@@ -19,6 +20,7 @@ export function HeartButton({
   likeCount,
   size = 'md',
   className,
+  hover = true,
   ...props
 }: HeartButtonProps) {
   return (
@@ -26,7 +28,8 @@ export function HeartButton({
       variant='ghost'
       size='sm'
       className={cn(
-        'gap-1 text-muted-foreground hover:text-foreground',
+        'gap-1 text-muted-foreground',
+        hover && 'hover:text-foreground',
         isLiked && 'text-red-500 hover:text-red-600',
         sizeClasses[size],
         className,

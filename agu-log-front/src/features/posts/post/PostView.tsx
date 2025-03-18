@@ -1,9 +1,12 @@
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
 import { ja } from 'date-fns/locale'
 import { Card } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { LikeButton } from './components/LikeButton/LikeButton'
 import { PostWithRelations } from '@/app/[username]/articles/[postId]/page'
+import CommentSection from './components/Comments/CommentSection'
+import { EditButton } from './components/EditButton/EditButton'
+import { Badge } from '@/components/ui/badge'
 
 type ArticleViewProps = {
   post: PostWithRelations
@@ -19,11 +22,20 @@ export default function PostView({ post, currentUserId }: ArticleViewProps) {
 
   const isLike = post.likes.some((like) => like.userId === currentUserId)
 
+  // 記事の所有者かどうかをチェック
+  const isOwner = currentUserId === post.authorId
+
+  // ユーザー名を取得
+  const username = post.author.profile?.username || ''
+
   return (
     <Card className='max-w-4xl mx-auto p-6'>
       {/* 記事ヘッダー */}
       <header className='mb-8'>
-        <h1 className='text-3xl font-bold mb-4'>{post.title}</h1>
+        <div className='flex justify-between items-start mb-4'>
+          <h1 className='text-3xl font-bold'>{post.title}</h1>
+          {isOwner && <EditButton username={username} postId={post.postId || ''} />}
+        </div>
         <div className='flex items-center gap-4'>
           <div className='flex items-center gap-2'>
             <Avatar>
@@ -33,6 +45,15 @@ export default function PostView({ post, currentUserId }: ArticleViewProps) {
             <div>
               <div className='font-semibold'>{post.author.profile?.displayName || 'ゲスト'}</div>
               <div className='text-sm text-muted-foreground'>{timeAgo}</div>
+            </div>
+            <div className=''>
+              <Badge variant='outline' className='shrink-0'>
+                {post.type === 'diary' && '日記'}
+                {post.type === 'poem' && 'ポエム'}
+                {post.type === 'tech' && '技術'}
+                {post.type === 'question' && '質問'}
+                {post.type === 'review' && 'レビュー'}
+              </Badge>
             </div>
           </div>
         </div>
@@ -57,6 +78,9 @@ export default function PostView({ post, currentUserId }: ArticleViewProps) {
           />
         </div>
       </footer>
+
+      {/* コメントセクション */}
+      <CommentSection postId={post.id} />
     </Card>
   )
 }
