@@ -6,6 +6,7 @@ import { LikeButton } from './components/LikeButton/LikeButton'
 import { PostWithRelations } from '@/app/[username]/articles/[postId]/page'
 import CommentSection from './components/Comments/CommentSection'
 import { EditButton } from './components/EditButton/EditButton'
+import { Badge } from '@/components/ui/badge'
 
 type ArticleViewProps = {
   post: PostWithRelations
@@ -44,6 +45,15 @@ export default function PostView({ post, currentUserId }: ArticleViewProps) {
             <div>
               <div className='font-semibold'>{post.author.profile?.displayName || 'ゲスト'}</div>
               <div className='text-sm text-muted-foreground'>{timeAgo}</div>
+            </div>
+            <div className=''>
+              <Badge variant='outline' className='shrink-0'>
+                {post.type === 'diary' && '日記'}
+                {post.type === 'poem' && 'ポエム'}
+                {post.type === 'tech' && '技術'}
+                {post.type === 'question' && '質問'}
+                {post.type === 'review' && 'レビュー'}
+              </Badge>
             </div>
           </div>
         </div>
