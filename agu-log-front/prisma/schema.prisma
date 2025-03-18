@@ -117,14 +117,24 @@ enum PostStatus {
   published
 }
 
+// 記事タイプのEnum追加
+enum PostType {
+  diary // 日記
+  poem // ポエム
+  tech // 技術
+  question // 質問
+  review // レビュー
+}
+
 model Post {
   id          String     @id @default(uuid())
-  postId      String?    @unique @map("post_id") @db.VarChar(16) // 追加：投稿ID
+  postId      String?    @unique @map("post_id") @db.VarChar(16) // 投稿ID
   authorId    String     @map("author_id")
   title       String
   content     String
   status      PostStatus @default(draft) // enum
-  viewCount   Int        @default(0) @map("view_count") // ビュー数を追加
+  type        PostType   @default(diary) // enum
+  viewCount   Int        @default(0) @map("view_count")
   publishedAt DateTime?  @map("published_at")
   metadata    Json?
   createdAt   DateTime   @default(now()) @map("created_at")
