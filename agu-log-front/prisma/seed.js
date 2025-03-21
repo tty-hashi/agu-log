@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-
+import process from 'process'
 const prisma = new PrismaClient()
 
 async function main() {
@@ -45,13 +45,14 @@ async function main() {
   // タグデータの定義
   const tags = [
     // 野菜カテゴリのタグ
-    { name: 'トマト', slug: 'tomato', categoryId: vegetableCategory?.id },
-    { name: 'キュウリ', slug: 'cucumber', categoryId: vegetableCategory?.id },
-    { name: 'ナス', slug: 'eggplant', categoryId: vegetableCategory?.id },
-    { name: 'ジャガイモ', slug: 'potato', categoryId: vegetableCategory?.id },
-    { name: 'タマネギ', slug: 'onion', categoryId: vegetableCategory?.id },
     { name: 'ニンジン', slug: 'carrot', categoryId: vegetableCategory?.id },
     { name: '白菜', slug: 'chinese-cabbage', categoryId: vegetableCategory?.id },
+    { name: 'キャベツ', slug: 'cabbage', categoryId: vegetableCategory?.id },
+    { name: 'ほうれん草', slug: 'spinach', categoryId: vegetableCategory?.id },
+    { name: '大根', slug: 'daikon', categoryId: vegetableCategory?.id },
+    { name: 'えだまめ', slug: 'edamame', categoryId: vegetableCategory?.id },
+    { name: 'カボチャ', slug: 'pumpkin', categoryId: vegetableCategory?.id },
+    { name: 'とうもろこし', slug: 'corn', categoryId: vegetableCategory?.id },
 
     // 果物カテゴリのタグ
     { name: 'リンゴ', slug: 'apple', categoryId: fruitCategory?.id },
@@ -59,6 +60,11 @@ async function main() {
     { name: 'イチゴ', slug: 'strawberry', categoryId: fruitCategory?.id },
     { name: 'ミカン', slug: 'mandarin', categoryId: fruitCategory?.id },
     { name: 'モモ', slug: 'peach', categoryId: fruitCategory?.id },
+    { name: 'ナシ', slug: 'pear', categoryId: fruitCategory?.id },
+    { name: 'カキ', slug: 'persimmon', categoryId: fruitCategory?.id },
+    { name: 'ブルーベリー', slug: 'blueberry', categoryId: fruitCategory?.id },
+    { name: 'キウイ', slug: 'kiwi', categoryId: fruitCategory?.id },
+    { name: 'スイカ', slug: 'watermelon', categoryId: fruitCategory?.id },
 
     // 栽培方法カテゴリのタグ
     { name: '有機栽培', slug: 'organic', categoryId: methodCategory?.id },
@@ -67,12 +73,27 @@ async function main() {
     { name: '露地栽培', slug: 'open-field', categoryId: methodCategory?.id },
     { name: '植物工場', slug: 'plant-factory', categoryId: methodCategory?.id },
     { name: '自然農法', slug: 'natural-farming', categoryId: methodCategory?.id },
+    { name: '無農薬栽培', slug: 'pesticide-free', categoryId: methodCategory?.id },
+    { name: '低農薬栽培', slug: 'low-pesticide', categoryId: methodCategory?.id },
+    { name: '鉢植え栽培', slug: 'pot-cultivation', categoryId: methodCategory?.id },
+    { name: 'プランター栽培', slug: 'planter-cultivation', categoryId: methodCategory?.id },
+    { name: '苗作り', slug: 'seedling', categoryId: methodCategory?.id },
+    { name: '接ぎ木', slug: 'grafting', categoryId: methodCategory?.id },
+    { name: '剪定', slug: 'pruning', categoryId: methodCategory?.id },
 
     // 病害虫カテゴリのタグ
     { name: 'うどんこ病', slug: 'powdery-mildew', categoryId: pestCategory?.id },
     { name: 'アブラムシ', slug: 'aphid', categoryId: pestCategory?.id },
     { name: '灰色かび病', slug: 'gray-mold', categoryId: pestCategory?.id },
     { name: 'ハダニ', slug: 'spider-mite', categoryId: pestCategory?.id },
+    { name: '疫病', slug: 'phytophthora', categoryId: pestCategory?.id },
+    { name: '黒星病', slug: 'black-spot', categoryId: pestCategory?.id },
+    { name: 'モザイク病', slug: 'mosaic-disease', categoryId: pestCategory?.id },
+    { name: 'ナメクジ', slug: 'slug', categoryId: pestCategory?.id },
+    { name: 'カイガラムシ', slug: 'scale-insect', categoryId: pestCategory?.id },
+    { name: 'コナジラミ', slug: 'whitefly', categoryId: pestCategory?.id },
+    { name: 'ネキリムシ', slug: 'cutworm', categoryId: pestCategory?.id },
+    { name: '根腐れ', slug: 'root-rot', categoryId: pestCategory?.id },
 
     // 気候・季節カテゴリのタグ
     { name: '春野菜', slug: 'spring-vegetables', categoryId: seasonCategory?.id },
@@ -81,7 +102,13 @@ async function main() {
     { name: '冬野菜', slug: 'winter-vegetables', categoryId: seasonCategory?.id },
     { name: '寒冷地', slug: 'cold-climate', categoryId: seasonCategory?.id },
     { name: '温暖地', slug: 'warm-climate', categoryId: seasonCategory?.id },
-  ]
+    { name: '雨季対策', slug: 'rainy-season', categoryId: seasonCategory?.id },
+    { name: '乾燥対策', slug: 'drought-measures', categoryId: seasonCategory?.id },
+    { name: '霜対策', slug: 'frost-protection', categoryId: seasonCategory?.id },
+    { name: '台風対策', slug: 'typhoon-measures', categoryId: seasonCategory?.id },
+    { name: '初心者向け', slug: 'beginner-friendly', categoryId: seasonCategory?.id },
+    { name: '多年草', slug: 'perennial', categoryId: seasonCategory?.id },
+    { name: '一年草', slug: 'annual', categoryId: seasonCategory?.id },]
 
   // タグの作成
   for (const tag of tags) {

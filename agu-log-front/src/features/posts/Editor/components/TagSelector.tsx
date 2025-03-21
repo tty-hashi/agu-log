@@ -53,11 +53,11 @@ export function TagSelector({ selectedTagIds, onChange, maxTags = 5 }: TagSelect
       setIsLoading(true)
       try {
         // タグを取得
-        const tagsResponse = await fetch(`${API_ROUTES.BASE}/api/tags`)
+        const tagsResponse = await fetch(`${API_ROUTES.TAGS}`)
         const tagsData = await tagsResponse.json()
 
         // カテゴリを取得
-        const categoriesResponse = await fetch(`${API_ROUTES.BASE}/api/tags/categories`)
+        const categoriesResponse = await fetch(`${API_ROUTES.TAGS_CATEGORIES}`)
         const categoriesData = await categoriesResponse.json()
 
         setTags(tagsData.tags || [])
