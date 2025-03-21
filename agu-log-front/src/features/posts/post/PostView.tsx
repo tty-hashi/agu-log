@@ -7,6 +7,7 @@ import { PostWithRelations } from '@/app/[username]/articles/[postId]/page'
 import CommentSection from './components/Comments/CommentSection'
 import { EditButton } from './components/EditButton/EditButton'
 import { Badge } from '@/components/ui/badge'
+import { Link } from 'lucide-react'
 
 type ArticleViewProps = {
   post: PostWithRelations
@@ -54,6 +55,19 @@ export default function PostView({ post, currentUserId }: ArticleViewProps) {
                 {post.type === 'question' && '質問'}
                 {post.type === 'review' && 'レビュー'}
               </Badge>
+              {post.tags && post.tags.length > 0 && (
+                <div className='mt-4'>
+                  <div className='flex flex-wrap gap-2'>
+                    {post.tags.map((postTag) => (
+                      <Link key={postTag.tag.id} href={`/tags/${postTag.tag.slug}`}>
+                        <Badge variant='outline' className='hover:bg-accent cursor-pointer'>
+                          {postTag.tag.name}
+                        </Badge>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

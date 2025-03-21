@@ -30,6 +30,11 @@ export default async function EditArticlePage({ params }: Props) {
           profile: true,
         },
       },
+      tags: {
+        select: {
+          tagId: true,
+        },
+      },
     },
   })
 
