@@ -1,4 +1,5 @@
 'use client'
+import { toast } from 'sonner'
 
 import * as React from 'react'
 import { Check, ChevronsUpDown, X } from 'lucide-react'
@@ -13,24 +14,8 @@ import {
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import { useEffect, useState } from 'react'
-import { API_ROUTES } from '@/constants/endpoint'
-import { toast } from 'sonner'
-
-type Tag = {
-  id: string
-  name: string
-  category: {
-    id: string
-    name: string
-  }
-}
-
-type TagCategory = {
-  id: string
-  name: string
-  description: string | null
-}
+import { useState } from 'react'
+import { useTags } from '@/hooks/useTags'
 
 interface TagSelectorProps {
   selectedTagIds: string[]
@@ -40,37 +25,15 @@ interface TagSelectorProps {
 
 export function TagSelector({ selectedTagIds, onChange, maxTags = 5 }: TagSelectorProps) {
   const [open, setOpen] = useState(false)
-  const [tags, setTags] = useState<Tag[]>([])
-  const [categories, setCategories] = useState<TagCategory[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+
+  const { tags, categories, isLoading, isError, categoriesError } = useTags()
+
+  if (isError) {
+    toast.error(categoriesError.Error)
+  }
 
   // 選択済みのタグを管理
   const selectedTags = tags.filter((tag) => selectedTagIds.includes(tag.id))
-
-  // タグとカテゴリの取得
-  useEffect(() => {
-    const fetchTagsAndCategories = async () => {
-      setIsLoading(true)
-      try {
-        // タグを取得
-        const tagsResponse = await fetch(`${API_ROUTES.TAGS}`)
-        const tagsData = await tagsResponse.json()
-
-        // カテゴリを取得
-        const categoriesResponse = await fetch(`${API_ROUTES.TAGS_CATEGORIES}`)
-        const categoriesData = await categoriesResponse.json()
-
-        setTags(tagsData.tags || [])
-        setCategories(categoriesData.categories || [])
-      } catch (error) {
-        toast.error('タグの取得に失敗しました')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchTagsAndCategories()
-  }, [])
 
   // タグの選択を処理
   const handleSelect = (tagId: string) => {
