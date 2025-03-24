@@ -32,16 +32,7 @@ const ArticleForm = ({ post }: ArticleFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent, status: 'draft' | 'published') => {
     e.preventDefault()
-    try {
-      updatePostSchema.parse({ title, content, status, type, tagIds, postId: post.postId })
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        toast.error('入力内容に誤りがあります')
-        return
-      }
-      toast.error('記事の保存に失敗しました')
-      return
-    }
+    updatePostSchema.parse({ title, content, status, type, tagIds, postId: post.postId })
     setIsSubmitting(true)
 
     try {

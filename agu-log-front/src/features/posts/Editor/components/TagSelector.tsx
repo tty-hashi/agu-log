@@ -1,5 +1,4 @@
 'use client'
-import { toast } from 'sonner'
 
 import * as React from 'react'
 import { Check, ChevronsUpDown, X } from 'lucide-react'
@@ -16,6 +15,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { useTags } from '@/hooks/useTags'
+import { toast } from 'sonner'
+import { CommandList } from 'cmdk'
 
 interface TagSelectorProps {
   selectedTagIds: string[]
@@ -25,15 +26,15 @@ interface TagSelectorProps {
 
 export function TagSelector({ selectedTagIds, onChange, maxTags = 5 }: TagSelectorProps) {
   const [open, setOpen] = useState(false)
+  const { tags, categories, isLoading, isError } = useTags()
 
-  const { tags, categories, isLoading, isError, categoriesError } = useTags()
-
+  // エラー処理
   if (isError) {
-    toast.error(categoriesError.Error)
+    toast.error('タグの取得に失敗しました')
   }
 
   // 選択済みのタグを管理
-  const selectedTags = tags.filter((tag) => selectedTagIds.includes(tag.id))
+  const selectedTags = selectedTagIds.map((id) => tags.find((tag) => tag.id === id)).filter(Boolean) // nullやundefinedを除外
 
   // タグの選択を処理
   const handleSelect = (tagId: string) => {
@@ -80,30 +81,34 @@ export function TagSelector({ selectedTagIds, onChange, maxTags = 5 }: TagSelect
           <PopoverContent className='p-0 w-full min-w-[300px]'>
             <Command>
               <CommandInput placeholder='タグを検索...' />
-              <CommandEmpty>タグが見つかりません</CommandEmpty>
-              {categories.map((category) => (
-                <CommandGroup key={category.id} heading={category.name}>
-                  {tags
-                    .filter((tag) => tag.category.id === category.id)
-                    .map((tag) => (
-                      <CommandItem
-                        key={tag.id}
-                        value={tag.name}
-                        onSelect={() => {
-                          handleSelect(tag.id)
-                          setOpen(false)
-                        }}>
-                        <Check
-                          className={cn(
-                            'mr-2 h-4 w-4',
-                            selectedTagIds.includes(tag.id) ? 'opacity-100' : 'opacity-0',
-                          )}
-                        />
-                        {tag.name}
-                      </CommandItem>
-                    ))}
-                </CommandGroup>
-              ))}
+              <CommandList>
+                <CommandEmpty>タグが見つかりません</CommandEmpty>
+
+                {categories.map((category) => (
+                  <CommandGroup key={category.id} heading={category.name}>
+                    {tags
+                      .filter((tag): tag is NonNullable<typeof tag> => Boolean(tag))
+                      .filter((tag) => tag.category?.id === category.id)
+                      .map((tag) => (
+                        <CommandItem
+                          key={tag.id}
+                          value={tag.name}
+                          onSelect={() => {
+                            handleSelect(tag.id)
+                            setOpen(false)
+                          }}>
+                          <Check
+                            className={cn(
+                              'mr-2 h-4 w-4',
+                              selectedTagIds.includes(tag.id) ? 'opacity-100' : 'opacity-0',
+                            )}
+                          />
+                          {tag.name}
+                        </CommandItem>
+                      ))}
+                  </CommandGroup>
+                ))}
+              </CommandList>
             </Command>
           </PopoverContent>
         </Popover>
@@ -113,11 +118,11 @@ export function TagSelector({ selectedTagIds, onChange, maxTags = 5 }: TagSelect
       {selectedTags.length > 0 && (
         <div className='flex flex-wrap gap-2'>
           {selectedTags.map((tag) => (
-            <Badge key={tag.id} variant='secondary' className='flex items-center gap-1'>
-              {tag.name}
+            <Badge key={tag?.id} variant='secondary' className='flex items-center gap-1'>
+              {tag?.name}
               <button
                 type='button'
-                onClick={() => handleRemove(tag.id)}
+                onClick={() => handleRemove(tag?.id || '')}
                 className='h-4 w-4 rounded-full hover:bg-muted'>
                 <X className='h-3 w-3' />
               </button>
