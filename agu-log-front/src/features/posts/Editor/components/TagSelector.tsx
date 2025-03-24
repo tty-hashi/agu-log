@@ -79,35 +79,38 @@ export function TagSelector({ selectedTagIds, onChange, maxTags = 5 }: TagSelect
             </Button>
           </PopoverTrigger>
           <PopoverContent className='p-0 w-full min-w-[300px]'>
-            <Command>
+            <Command className='max-h-[400px]'>
               <CommandInput placeholder='タグを検索...' />
-              <CommandList>
+              <CommandList className='max-h-[300px] overflow-y-auto'>
                 <CommandEmpty>タグが見つかりません</CommandEmpty>
 
-                {categories.map((category) => (
-                  <CommandGroup key={category.id} heading={category.name}>
-                    {tags
-                      .filter((tag): tag is NonNullable<typeof tag> => Boolean(tag))
-                      .filter((tag) => tag.category?.id === category.id)
-                      .map((tag) => (
-                        <CommandItem
-                          key={tag.id}
-                          value={tag.name}
-                          onSelect={() => {
-                            handleSelect(tag.id)
-                            setOpen(false)
-                          }}>
-                          <Check
-                            className={cn(
-                              'mr-2 h-4 w-4',
-                              selectedTagIds.includes(tag.id) ? 'opacity-100' : 'opacity-0',
-                            )}
-                          />
-                          {tag.name}
-                        </CommandItem>
-                      ))}
-                  </CommandGroup>
-                ))}
+                {categories && categories.length > 0 ? (
+                  categories.map((category) => (
+                    <CommandGroup key={category.id} heading={category.name}>
+                      {tags
+                        .filter((tag) => tag.category?.id === category.id)
+                        .map((tag) => (
+                          <CommandItem
+                            key={tag.id}
+                            value={tag.name}
+                            onSelect={() => {
+                              handleSelect(tag.id)
+                              setOpen(false)
+                            }}>
+                            <Check
+                              className={cn(
+                                'mr-2 h-4 w-4',
+                                selectedTagIds.includes(tag.id) ? 'opacity-100' : 'opacity-0',
+                              )}
+                            />
+                            {tag.name}
+                          </CommandItem>
+                        ))}
+                    </CommandGroup>
+                  ))
+                ) : (
+                  <div className='py-6 text-center text-sm'>カテゴリが読み込まれていません</div>
+                )}
               </CommandList>
             </Command>
           </PopoverContent>
