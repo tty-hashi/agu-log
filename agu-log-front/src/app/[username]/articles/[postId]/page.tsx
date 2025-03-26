@@ -20,6 +20,11 @@ const postGetPayload = {
     },
   },
   likes: true,
+  tags: {
+    include: {
+      tag: true,
+    },
+  },
   _count: {
     select: {
       likes: true,

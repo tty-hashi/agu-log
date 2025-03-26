@@ -12,21 +12,27 @@ import { API_ROUTES } from '@/constants/endpoint'
 import { z } from 'zod'
 import { updatePostSchema } from '@/validations/schemas/post'
 import { PostTypeSelector } from './components/PostTypeSelector'
+import { TagSelector } from './components/TagSelector'
 
-interface Props {
-  post: Post
+interface ArticleFormProps {
+  post: Post & {
+    tags?: {
+      tagId: string
+    }[]
+  }
 }
 
-const ArticleForm = ({ post }: Props) => {
+const ArticleForm = ({ post }: ArticleFormProps) => {
   const router = useRouter()
   const [title, setTitle] = useState(post.title)
   const [content, setContent] = useState(post.content)
-  const [type, setType] = useState<PostType>(post.type || 'diary') // 記事タイプの状態追加
+  const [type, setType] = useState<PostType>(post.type || 'diary')
+  const [tagIds, setTagIds] = useState<string[]>(post.tags?.map((tag) => tag.tagId) || [])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent, status: 'draft' | 'published') => {
     e.preventDefault()
-    updatePostSchema.parse({ title, content, status, type, postId: post.postId })
+    updatePostSchema.parse({ title, content, status, type, tagIds, postId: post.postId })
     setIsSubmitting(true)
 
     try {
@@ -39,7 +45,8 @@ const ArticleForm = ({ post }: Props) => {
           title,
           content,
           status,
-          type, // 記事タイプを追加
+          type,
+          tagIds,
           postId: post.postId,
         }),
       })
@@ -81,7 +88,11 @@ const ArticleForm = ({ post }: Props) => {
         />
       </div>
 
+      {/* 記事タイプ選択 */}
       <PostTypeSelector value={type} onChange={setType} />
+
+      {/* タグ選択 */}
+      <TagSelector selectedTagIds={tagIds} onChange={setTagIds} maxTags={5} />
 
       <div className='space-y-2'>
         <Label>本文</Label>
