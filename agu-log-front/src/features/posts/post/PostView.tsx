@@ -7,7 +7,7 @@ import { PostWithRelations } from '@/app/[username]/articles/[postId]/page'
 import CommentSection from './components/Comments/CommentSection'
 import { EditButton } from './components/EditButton/EditButton'
 import { Badge } from '@/components/ui/badge'
-import { Link } from 'lucide-react'
+import { PostTags } from '@/features/tags/components/PostTags'
 
 type ArticleViewProps = {
   post: PostWithRelations
@@ -48,26 +48,9 @@ export default function PostView({ post, currentUserId }: ArticleViewProps) {
               <div className='text-sm text-muted-foreground'>{timeAgo}</div>
             </div>
             <div className=''>
-              <Badge variant='outline' className='shrink-0'>
-                {post.type === 'diary' && '日記'}
-                {post.type === 'poem' && 'ポエム'}
-                {post.type === 'tech' && '技術'}
-                {post.type === 'question' && '質問'}
-                {post.type === 'review' && 'レビュー'}
-              </Badge>
-              {post.tags && post.tags.length > 0 && (
-                <div className='mt-4'>
-                  <div className='flex flex-wrap gap-2'>
-                    {post.tags.map((postTag) => (
-                      <Link key={postTag.tag.id} href={`/tags/${postTag.tag.slug}`}>
-                        <Badge variant='outline' className='hover:bg-accent cursor-pointer'>
-                          {postTag.tag.name}
-                        </Badge>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <PostTypeBadge type={post.type} />
+
+              <PostTags tags={post.tags} className='mt-4' />
             </div>
           </div>
         </div>
@@ -96,5 +79,33 @@ export default function PostView({ post, currentUserId }: ArticleViewProps) {
       {/* コメントセクション */}
       <CommentSection postId={post.id} />
     </Card>
+  )
+}
+
+type PostTypeBadge = {
+  type: string
+}
+
+const PostTypeBadge = ({ type }: PostTypeBadge) => {
+  const getBadgeText = (type: string) => {
+    switch (type) {
+      case 'diary':
+        return '日記'
+      case 'poem':
+        return 'ポエム'
+      case 'tech':
+        return '技術'
+      case 'question':
+        return '質問'
+      case 'review':
+        return 'レビュー'
+      default:
+        return null
+    }
+  }
+  return (
+    <Badge variant='outline' className='shrink-0'>
+      {getBadgeText(type)}
+    </Badge>
   )
 }

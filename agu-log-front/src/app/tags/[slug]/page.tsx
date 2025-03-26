@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default async function TagPage({ params }: Props) {
-  const { slug } = params
+  const { slug } = await params
 
   // タグの情報を取得
   const tag = await prisma.tag.findUnique({
